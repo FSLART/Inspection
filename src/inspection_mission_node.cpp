@@ -52,7 +52,7 @@ private:
         steering_pub_->publish(std_msgs::msg::Float64());  // centrar steering
         RCLCPP_INFO(this->get_logger(), "Published center steering command");
         
-        RCLCPP_INFO(this->get_logger(), "Inspection mission completed successfully.");
+        std::exit(0);
       }
     }
   }
