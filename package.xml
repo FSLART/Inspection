@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>inspection_mission</name>
-  <version>0.0</version>
+  <version>0.1.0</version>
   <description>InspectionMission</description>
 
   <maintainer email="2221438@my.ipleiria.pt">joaom</maintainer>
