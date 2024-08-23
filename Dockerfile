@@ -22,4 +22,4 @@ WORKDIR /ros2_ws
 RUN /bin/bash -c "source /opt/ros/foxy/setup.bash && colcon build --symlink-install --parallel-workers 2"
 
 # launch the package on startup
-CMD ["/bin/bash", "-c", "source /opt/ros/foxy/setup.bash && source /ros2_ws/install/setup.bash && ros2 run inspection_mission inspection_mission_node"]
+# CMD ["/bin/bash", "-c", "source /opt/ros/foxy/setup.bash && source /ros2_ws/install/setup.bash && ros2 run inspection_mission inspection_mission_node"]
