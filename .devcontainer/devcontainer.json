@@ -16,6 +16,7 @@
 		"vscode": {
 			"extensions": [
 				"ms-iot.vscode-ros",
+				"ms-vscode.cpptools-extension-pack",
 				"ms-azuretools.vscode-docker"
 			]
 		}
