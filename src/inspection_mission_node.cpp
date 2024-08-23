@@ -22,7 +22,8 @@ void InspectionMission::timer_callback() {
     rclcpp::Time current_time = this->now();
 
     // calculate the elapsed time
-    auto elapsed_time = this->start_time - current_time;
+    rclcpp::Duration elapsed_time_dur = this->start_time - current_time;
+    float elapsed_time = elapsed_time_dur.seconds(); 
 
     // if the total elapsed time has passed, shut the node down
     if(elapsed_time > MISSION_DURATION_SEC) {
@@ -30,12 +31,12 @@ void InspectionMission::timer_callback() {
     }
 
     // calculate the steering angle based on the current time
-    float st_angle_cur = MAX_STEERING_ANGLE_RAD * std::sinf(((2.0f*LART_PI)/STEERING_PERIOD_SEC)*elapsed_time);
+    float st_angle_cur = MAX_STEERING_ANGLE_RAD * std::sin(((2.0f*LART_PI)/STEERING_PERIOD_SEC)*elapsed_time);
 
     // initialize the control message
     lart_msgs::msg::DynamicsCMD cmd = lart_msgs::msg::DynamicsCMD();
     cmd.steering_angle = st_angle_cur;
-    cmd.motor_speed_rpm = (std::uint16_t) MOTOR_SPEED_RPM;
+    cmd.rpm = (std::uint16_t) MOTOR_SPEED_RPM;
 
     // publish the control message
     this->control_pub->publish(cmd);
