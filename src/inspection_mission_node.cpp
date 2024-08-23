@@ -1,74 +1,42 @@
-#include <chrono>
-#include <cmath>
-#include <memory>
-#include <rclcpp/rclcpp.hpp>
-#include <std_msgs/msg/float64.hpp>
-#include <geometry_msgs/msg/twist.hpp>
+#include "inspection_mission_node.h"
 
-using namespace std::chrono_literals;
+InspectionMission::InspectionMission() : Node("inspection_mission_node") {
 
-class InspectionMission : public rclcpp::Node
-{
-public:
-  InspectionMission()
-  : Node("inspection_mission_node"),
-    start_time_(this->now()),
-    finished_(false)
-  {
-    // criar os publishers
-    drivetrain_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("drivetrain_cmd", 10);
-    steering_pub_ = this->create_publisher<std_msgs::msg::Float64>("steering_cmd", 10);
+    // get the current time
+    this->start_time = this->now();
 
-    timer_ = this->create_wall_timer(
-      100ms, std::bind(&InspectionMission::timer_callback, this));
-  }
+    // create the publisher
+    this->control_pub = this->create_publisher<lart_msgs::msg::DynamicsCMD>("/cmd", 10);
 
-private:
-  void timer_callback()
-  {
-    auto current_time = this->now();
-    auto elapsed_time = (current_time - start_time_).seconds();
+    // create a timer bound to the timer callback every 100ms
+    this->timer = this->create_wall_timer(CMD_PUBLISH_PERIOD, std::bind(&InspectionMission::timer_callback, this));
 
-    if (!finished_) {
-      // drivetrain
-      auto drivetrain_cmd = geometry_msgs::msg::Twist();
-      drivetrain_cmd.linear.x = 0.1;  // rodar devagar
-      drivetrain_pub_->publish(drivetrain_cmd);
-      RCLCPP_INFO(this->get_logger(), "Published drivetrain command");
+    // initialize the finished flag to false
+    this->finished = false;
 
-      // steering
-      auto steering_cmd = std_msgs::msg::Float64();
-      steering_cmd.data = 0.5 * std::sin(0.2 * elapsed_time);  // sine wave com periodo de 10s
-      steering_pub_->publish(steering_cmd);
-      RCLCPP_INFO(this->get_logger(), "Published steering command");
+}
 
-      if (elapsed_time >= 25.0 && elapsed_time <= 30.0) {
-        finished_ = true;
-        RCLCPP_INFO(this->get_logger(), "AS Finished");
+void InspectionMission::timer_callback() {
 
-        drivetrain_pub_->publish(geometry_msgs::msg::Twist());  // parar drivetrain
-        RCLCPP_INFO(this->get_logger(), "Published stop drivetrain command");
+    // get the current time
+    rclcpp::Time current_time = this->now();
 
-        steering_pub_->publish(std_msgs::msg::Float64());  // centrar steering
-        RCLCPP_INFO(this->get_logger(), "Published center steering command");
-        
-        std::exit(0);
-      }
+    // calculate the elapsed time
+    auto elapsed_time = this->start_time - current_time;
+
+    // if the total elapsed time has passed, shut the node down
+    if(elapsed_time > MISSION_DURATION_SEC) {
+        rclcpp::shutdown();
     }
-  }
 
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr drivetrain_pub_;
-  rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr steering_pub_;
-  rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Time start_time_;
-  bool finished_;
-};
+    // calculate the steering angle based on the current time
+    float st_angle_cur = MAX_STEERING_ANGLE_RAD * std::sinf(((2.0f*LART_PI)/STEERING_PERIOD_SEC)*elapsed_time);
 
-int main(int argc, char * argv[])
-{
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<InspectionMission>();
-  rclcpp::spin(node);
-  rclcpp::shutdown();
-  return 0;
+    // initialize the control message
+    lart_msgs::msg::DynamicsCMD cmd = lart_msgs::msg::DynamicsCMD();
+    cmd.steering_angle = st_angle_cur;
+    cmd.motor_speed_rpm = (std::uint16_t) MOTOR_SPEED_RPM;
+
+    // publish the control message
+    this->control_pub->publish(cmd);
 }
