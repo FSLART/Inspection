@@ -41,3 +41,12 @@ void InspectionMission::timer_callback() {
     // publish the control message
     this->control_pub->publish(cmd);
 }
+
+int main(int argc, char* argv[]) {
+
+    rclcpp::init(argc, argv);
+    rclcpp::spin(std::make_shared<InspectionMission>());
+    rclcpp::shutdown();
+
+    return 0;
+}
