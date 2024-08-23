@@ -10,6 +10,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+include_directories(include)
 add_executable(inspection_mission_node src/inspection_mission_node.cpp)
 
 ament_target_dependencies(
