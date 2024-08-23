@@ -8,7 +8,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
+find_package(lart_msgs REQUIRED)
 
 include_directories(include)
 add_executable(inspection_mission_node src/inspection_mission_node.cpp)
@@ -17,7 +17,7 @@ ament_target_dependencies(
   inspection_mission_node
   rclcpp
   std_msgs
-  geometry_msgs
+  lart_msgs
 )
 
 install(TARGETS
