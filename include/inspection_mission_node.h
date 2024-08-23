@@ -9,7 +9,8 @@
 
 #define STEERING_PERIOD_SEC 5.0f
 #define MOTOR_SPEED_RPM 10
-#define CMD_PUBLISH_PERIOD 100ms
+#define CMD_PUBLISH_PERIOD std::chrono::milliseconds(100)
+#define MISSION_DURATION_SEC 26
 
 
 /*! \brief Inspection mission node class. */
