@@ -10,7 +10,11 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(lart_msgs REQUIRED)
 
-include_directories(include)
+include_directories(
+  include  
+  ${CMAKE_SOURCE_DIR}/../lart_common
+)
+
 add_executable(inspection_mission_node src/inspection_mission_node.cpp)
 
 ament_target_dependencies(

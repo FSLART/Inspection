@@ -5,7 +5,7 @@
 #include <chrono>
 #include <cmath>
 #include "lart_msgs/msg/dynamics_cmd.hpp"
-#include "lart_common/lart_common.h"
+#include "lart_common.h"
 
 #define STEERING_PERIOD_SEC 5.0f
 #define MOTOR_SPEED_RPM 10
