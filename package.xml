@@ -4,7 +4,7 @@
   <version>0.1.0</version>
   <description>InspectionMission</description>
 
-  <maintainer email="2221438@my.ipleiria.pt">joaom</maintainer>
+  <maintainer email="2230779@my.ipleiria.pt">Andre Lopes</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

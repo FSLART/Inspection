@@ -5,12 +5,15 @@
 #include <chrono>
 #include <cmath>
 #include "lart_msgs/msg/dynamics_cmd.hpp"
+#include "lart_msgs/msg/state.hpp"
 #include "lart_common.h"
 
 #define STEERING_PERIOD_SEC 5.0f
-#define MOTOR_SPEED_RPM 10
+#define MOTOR_SPEED_RPM 100
 #define CMD_PUBLISH_PERIOD std::chrono::milliseconds(100)
 #define MISSION_DURATION_SEC 26.0
+
+#define DEBUG 1
 
 
 /*! \brief Inspection mission node class. */
@@ -24,8 +27,19 @@ class InspectionMission : public rclcpp::Node {
         /*! \brief Timer callback for control publishing. */
         void timer_callback();
 
+        void state_callback(const lart_msgs::msg::State::SharedPtr msg); 
+
         /*! \brief Control command publisher. */
         rclcpp::Publisher<lart_msgs::msg::DynamicsCMD>::SharedPtr control_pub;
+
+        /*! \brief  state message*/
+        rclcpp::Publisher<lart_msgs::msg::State>::SharedPtr finished_pub;
+
+        /*! \brief state sub */
+        rclcpp::Subscription<lart_msgs::msg::State>::SharedPtr state_sub;
+
+        /*! \brief state*/
+        lart_msgs::msg::State state;
 
         /*! \brief Timer. */
         rclcpp::TimerBase::SharedPtr timer;
