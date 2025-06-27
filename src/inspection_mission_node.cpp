@@ -11,7 +11,7 @@ InspectionMission::InspectionMission() : Node("inspection_mission_node") {
     this->finished_pub = this->create_publisher<lart_msgs::msg::State>("/pc_origin/system_status/critical_as", 10);
 
     // create the state subscriber
-    this->state_sub = this->create_subscription<lart_msgs::msg::State>("/acu_origin/system_status/critical_as", 10, std::bind(&InspectionMission::state_callback, this, std::placeholders::_1));
+    this->state_sub = this->create_subscription<lart_msgs::msg::State>("/pc_origin/system_status/critical_as/state", 10, std::bind(&InspectionMission::state_callback, this, std::placeholders::_1));
 
     // create a timer bound to the timer callback every 100ms
     this->timer = this->create_wall_timer(CMD_PUBLISH_PERIOD, std::bind(&InspectionMission::timer_callback, this));
@@ -34,7 +34,7 @@ void InspectionMission::timer_callback() {
         lart_msgs::msg::DynamicsCMD cmd = lart_msgs::msg::DynamicsCMD();
 
         // calculate the steering angle based on the current time
-        float st_angle_cur = MAX_WHEEL_ANGLE_RAD * std::sin(((2.0f*LART_PI)/STEERING_PERIOD_SEC)*elapsed_time);
+        float st_angle_cur = DEG_TO_RAD(22) * std::sin(((2.0f*LART_PI)/STEERING_PERIOD_SEC)*elapsed_time);
 
         // initialize the control message
         cmd.steering_angle = st_angle_cur;
