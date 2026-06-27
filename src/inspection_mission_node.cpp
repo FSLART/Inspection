@@ -6,12 +6,12 @@ InspectionMission::InspectionMission() : Node("inspection_mission_node") {
     // this->start_time = this->now();
 
     // create the publisher
-    this->control_pub = this->create_publisher<lart_msgs::msg::DynamicsCMD>("/cmd", 10);
+    this->control_pub = this->create_publisher<lart_msgs::msg::DynamicsCMD>(TOPIC_CONTROL_RPM_TARGET, 10);
 
-    this->finished_pub = this->create_publisher<lart_msgs::msg::State>("/pc_origin/system_status/critical_as", 10);
+    this->finished_pub = this->create_publisher<lart_msgs::msg::State>(TOPIC_STATE_NODES, 10);
 
     // create the state subscriber
-    this->state_sub = this->create_subscription<lart_msgs::msg::State>("/pc_origin/system_status/critical_as/state", 10, std::bind(&InspectionMission::state_callback, this, std::placeholders::_1));
+    this->state_sub = this->create_subscription<lart_msgs::msg::State>(TOPIC_STATE_PC, 10, std::bind(&InspectionMission::state_callback, this, std::placeholders::_1));
 
     // create a timer bound to the timer callback every 100ms
     this->timer = this->create_wall_timer(CMD_PUBLISH_PERIOD, std::bind(&InspectionMission::timer_callback, this));

@@ -7,6 +7,7 @@
 #include "lart_msgs/msg/dynamics_cmd.hpp"
 #include "lart_msgs/msg/state.hpp"
 #include "lart_common.h"
+#include "topics.h"
 
 #define STEERING_PERIOD_SEC 6.0f
 #define MOTOR_SPEED_RPM 100
