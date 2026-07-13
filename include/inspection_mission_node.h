@@ -13,6 +13,7 @@
 #define MOTOR_SPEED_RPM 400
 #define CMD_PUBLISH_PERIOD std::chrono::milliseconds(100)
 #define MISSION_DURATION_SEC 26.0
+#define CONTROL_START_DELAY_SEC 3.0
 
 #define DEBUG 1
 

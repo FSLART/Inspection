@@ -30,6 +30,14 @@ void InspectionMission::timer_callback() {
         rclcpp::Duration elapsed_time_dur = current_time - this->start_time;
         float elapsed_time = elapsed_time_dur.seconds();
 
+        // wait for the control start delay to elapse before actuating
+        if (elapsed_time < CONTROL_START_DELAY_SEC) {
+            return;
+        }
+
+        // shift elapsed time so the mission clock starts after the delay
+        elapsed_time -= CONTROL_START_DELAY_SEC;
+
         //Creating the control message
         lart_msgs::msg::DynamicsCMD cmd = lart_msgs::msg::DynamicsCMD();
 
